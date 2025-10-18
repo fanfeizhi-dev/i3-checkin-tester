@@ -1,0 +1,14 @@
+{
+  "plan2": {
+    "walletCount": 2,
+    "perTxDelayMs": 120,
+    "openUi": true,
+    "sendOnPage": false
+  },
+  "plan10": {
+    "walletCount": 10,
+    "perTxDelayMs": 120,
+    "openUi": true,
+    "sendOnPage": false
+  }
+}

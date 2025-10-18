@@ -1,0 +1,6 @@
+[
+  { "type": "function", "name": "checkIn", "stateMutability": "nonpayable", "inputs": [], "outputs": [] },
+  { "type": "function", "name": "getUserStatus", "stateMutability": "view", "inputs": [{"name":"user","type":"address"}], "outputs": [{"name":"last","type":"uint256"},{"name":"streak","type":"uint256"},{"name":"total","type":"uint256"}]},
+  { "type": "function", "name": "getGlobalStats", "stateMutability": "view", "inputs": [], "outputs": [{"name":"users","type":"uint256"},{"name":"total","type":"uint256"}]},
+  { "type": "event", "name": "CheckedIn", "inputs": [{"name":"user","type":"address","indexed":true},{"name":"ts","type":"uint256","indexed":false}], "anonymous": false }
+]

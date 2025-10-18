@@ -1,0 +1,37 @@
+{
+  "name": "i3-checkin-tester",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "derive:2": "node scripts/derive-addresses.js --n=2",
+    "derive:10": "node scripts/derive-addresses.js --n=10",
+
+    "fund": "node scripts/fund-wallets.js",
+    "checkin": "node scripts/bulk-checkin.js",
+
+    "fund:bnb": "CHAIN=bnb node scripts/fund-wallets.js",
+    "checkin:bnb": "CHAIN=bnb node scripts/bulk-checkin.js",
+
+    "fund:op": "CHAIN=opbnb node scripts/fund-wallets.js",
+    "checkin:op": "CHAIN=opbnb node scripts/bulk-checkin.js",
+
+    "run:2": "node scripts/orchestrate-2-first.js",
+    "run:10": "node scripts/orchestrate-10-main.js",
+
+    "lint": "echo \"(optional) add eslint if needed\" && exit 0",
+    "prepare": "echo \"(optional) git hooks or playwright install removed\" && exit 0"
+  },
+  "dependencies": {
+    "dotenv": "*",
+    "ethers": "*"
+  },
+  "devDependencies": {
+    "@types/node": "*",
+    "ts-node": "*",
+    "typescript": "*"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "bnb": {
+    "name": "BNB Mainnet",
+    "chainIdHex": "0x38",
+    "chainId": 56,
+    "rpcHttps": "${RPC_BNB_MAINNET}",
+    "checkInContract": "${CHECKIN_CONTRACT_BNB}"
+  },
+  "opbnb": {
+    "name": "opBNB",
+    "chainIdHex": "0xCC",
+    "chainId": 204,
+    "rpcHttps": "${RPC_OPBNB_MAINNET}",
+    "checkInContract": "${CHECKIN_CONTRACT_OPBNB}"
+  }
+}
