@@ -12,7 +12,6 @@ dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 
-// ---- 读取 JSON（避免 import assertions）
 function readJson(relPath) {
   const p = path.resolve(ROOT, relPath);
   return JSON.parse(fs.readFileSync(p, 'utf-8'));
@@ -22,16 +21,23 @@ function envResolve(s) {
   return s.startsWith('${') ? (process.env[s.slice(2, -1)] || '') : s;
 }
 
-// 配置与 ABI
+// === 关键：可选择地址清单文件（默认 addresses.batch.json） ===
+const ADDR_FILE = process.env.ADDR_FILE || 'addresses.batch.json';
+const ADDR_PATH = path.resolve(ROOT, ADDR_FILE);
+if (!fs.existsSync(ADDR_PATH)) throw new Error(`缺少地址文件：${ADDR_FILE}`);
+let list = JSON.parse(fs.readFileSync(ADDR_PATH, 'utf-8'));
+
+// 可选切片
+const s = Number(process.env.ADDR_START || 0);
+const c = process.env.ADDR_COUNT ? Number(process.env.ADDR_COUNT) : null;
+if (Number.isFinite(s) && s > 0) list = list.slice(s);
+if (c !== null && Number.isFinite(c)) list = list.slice(0, c);
+console.log(`地址来源 ${ADDR_FILE}，items=${list.length}`);
+
+// 配置
 const chains = readJson('config/chains.json');
 const abi = readJson('abis/I3CheckInCore.json');
 
-// 地址清单
-const ADDR = path.resolve(ROOT, 'addresses.batch.json');
-if (!fs.existsSync(ADDR)) throw new Error('缺少 addresses.batch.json，请先 derive');
-const list = JSON.parse(fs.readFileSync(ADDR, 'utf-8'));
-
-// 🔀 关键：按 CHAIN 选择网络（默认 bnb）
 const net = (process.env.CHAIN || 'bnb').toLowerCase();
 if (!chains[net]) throw new Error(`未知 CHAIN=${net}，可选：${Object.keys(chains).join(', ')}`);
 
@@ -44,9 +50,7 @@ if (!contractAddr) throw new Error(`CheckIn 合约未配置: ${net}`);
 const provider = getProvider(rpc);
 console.log(`CHAIN=${net} RPC=${rpc} contract=${contractAddr} items=${list.length}`);
 
-// 🧮 按链设置“发交易前的余额下限”
-// - BNB：默认 0.00003（你实测 ~0.00002941）
-// - opBNB：默认 0.00000001（10^-8），远小于你分发的 6e-8
+// 最低余额阈值（可调）
 const DEFAULT_MIN = { bnb: '0.00003', opbnb: '0.00000001' };
 const MIN_CHECKIN_BNB =
   net === 'bnb'
@@ -62,14 +66,13 @@ for (const it of list) {
   const contract = new ethers.Contract(contractAddr, abi, wallet);
 
   try {
-    // 0) 保护：跳过“链上已有代码”的地址（合约地址）
     const code = await provider.getCode(it.address);
     if (code && code !== '0x') {
       console.log(`[skip-contract] #${it.index} ${it.address} 是合约地址，跳过 checkIn`);
       continue;
     }
 
-    // 1) 等余额可见、达到阈值
+    // 等资金到账
     let bal = await provider.getBalance(it.address);
     let tries = 0;
     while (bal < MIN_NEEDED && tries < BAL_RETRY_MAX) {
@@ -84,7 +87,7 @@ for (const it of list) {
       throw new Error(`balance still low (${ethers.formatEther(bal)} BNB < ${MIN_CHECKIN_BNB}); skip`);
     }
 
-    // 2) 估算 gas 并加一点 buffer
+    // 估算 gas（可选）+ 调用
     const gas = await contract.checkIn.estimateGas().catch(() => 0n);
     const tx = gas && gas > 0n
       ? await contract.checkIn({ gasLimit: gas + 20_000n })
@@ -96,6 +99,5 @@ for (const it of list) {
     console.error(`[checkin] #${it.index} ${it.address} ERR: ${e.message}`);
   }
 
-  // 3) 地址间节流
   await sleep(delay);
 }
