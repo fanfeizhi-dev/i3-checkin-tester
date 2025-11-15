@@ -1,0 +1,19 @@
+for i in $(seq 2 10); do
+  rsync -a --delete \
+    --exclude ".git" \
+    --exclude "addresses.batch.json" \
+    --exclude "addresses.last.json" \
+    --exclude "*.log" \
+    --exclude ".cache" \
+    i3-checkin-tester/ i3-checkin-test$i/
+done
+
+2:8c92d3b4158be18764d2f48805a60a8f09a5c0a980dfbadcb659b555c3de2af9
+3:d461780091c58244826dfe5dd466271bd695737ba2241fa211c28470be4db2e4
+4:54f8400c12aebd7c97c5d2488f4f4a8632eca7d16fc00217def17b346df54818
+5:65c2ef7dba36089e4786942f32da309887e53bffa2b3a6473c6a1ee5c22eeae6
+6:ed1b4f298b985283a83e18985c67e2b48e30b0391031aaaa34e695b462e55815
+7:f041792c8efc8737d62c94178130d9b1476e092705ffceff0002520037664a9a
+8:8af4b3c1814a331cf54720d4c34f46744c3da3252e96d9e8f73e271a34ced7b9
+9:0fc7d9119e0ca2a4a60c71053fdbecbf66c1942131ca0e610d3500fb06833b08
+10:6992e84f67b19781e1d2173c8ff36b7b1c8ca51e31687e5362ee90fd0dcfa9a6
