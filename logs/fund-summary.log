@@ -2,3 +2,6 @@ timestamp,chain,addr_file,total,ok,skipFunded,skipContract,err
 2025-11-14T03:55:02.599Z,opbnb,addresses.last.json,50,50,0,0,0
 2025-11-14T05:51:11.106Z,opbnb,addresses.last.json,100,100,0,0,0
 2025-11-14T16:39:02.897Z,opbnb,addresses.last.json,7500,7500,0,0,0
+2025-11-15T17:00:34.110Z,opbnb,addresses.last.json,600,600,0,0,0
+2025-11-16T11:27:37.025Z,opbnb,addresses.last.json,8000,8000,0,0,0
+2025-11-17T12:54:48.918Z,opbnb,addresses.last.json,10000,10000,0,0,0

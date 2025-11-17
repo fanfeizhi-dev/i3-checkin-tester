@@ -1,6 +1,7 @@
 node_modules
 .env
-wallets/mnemonic.txt
+addresses.last.json
 addresses.batch.json
 playwright-report
 test-results
+fund-summary.log
