@@ -1,0 +1,2 @@
+timestamp,chain,addr_file,total,ok,skipContract,skipBalance,err
+2025-11-18T21:57:18.316Z,opbnb,addresses.last.json,600,534,0,0,66
